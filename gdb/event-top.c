@@ -1076,10 +1076,13 @@ default_quit_handler (void)
 {
   if (check_quit_flag ())
     {
-      if (target_terminal::is_ours ())
-	quit ();
+      if (target_terminal::is_ours ()) {
+        if (RL_ISSTATE (RL_STATE_ISEARCH))
+          rl_execute_next(CTRL('G'));
+        quit ();
+      }
       else
-	target_pass_ctrlc ();
+        target_pass_ctrlc ();
     }
 }
 
